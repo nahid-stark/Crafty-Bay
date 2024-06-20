@@ -23,105 +23,113 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       body: Column(
         children: [
           _appBar(),
-          const ProductImageCarouselSlider(),
           Expanded(
             child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+              child: Column(
+                children: [
+                  const ProductImageCarouselSlider(),
+                  Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildProductName(),
-                        _buildItemCounter(),
+                        Row(
+                          children: [
+                            _buildProductName(),
+                            _buildItemCounter(),
+                          ],
+                        ),
+                        _buildReviewSection(),
+                        Text(
+                          "Color",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        ColorPicker(
+                          colors: const [
+                            Colors.green,
+                            Colors.red,
+                            Colors.blue,
+                            Colors.amber,
+                            Colors.purple,
+                          ],
+                          onChange: (Color selectedColor) {},
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "Size",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        SizePicker(
+                          sizes: const [
+                            "XL",
+                            "XXL",
+                            "2L",
+                            "M",
+                            "S",
+                            "L",
+                          ],
+                          onChange: (String selectedSize) {},
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "Description",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black.withOpacity(0.7),
+                          ),
+                        ),
+                        const Text(
+                          '''Tesla primarily uses lithium-ion batteries, known for their high energy density and efficiency.Tesla primarily uses lithium-ion batteries, known for their high energy density and efficiency.Tesla primarily uses lithium-ion batteries, known for their high energy density and efficiency.Tesla primarily uses lithium-ion batteries, known for their high energy density and efficiency.Tesla primarily uses lithium-ion batteries, known for their high energy density and efficiency.''',
+                        ),
                       ],
                     ),
-                    _buildReviewSection(),
-                    Text(
-                      "Color",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black.withOpacity(0.7),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    ColorPicker(
-                      colors: const [
-                        Colors.green,
-                        Colors.red,
-                        Colors.blue,
-                        Colors.amber,
-                        Colors.purple,
-                      ],
-                      onChange: (Color selectedColor) {},
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "Size",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black.withOpacity(0.7),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    SizePicker(
-                      sizes: const [
-                        "XL",
-                        "XXL",
-                        "2L",
-                        "M",
-                        "S",
-                        "L",
-                      ],
-                      onChange: (String selectedSize) {},
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "Description",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black.withOpacity(0.7),
-                      ),
-                    ),
-                    const Text(
-                      '''Tesla primarily uses lithium-ion batteries, known for their high energy density and efficiency.Tesla primarily uses lithium-ion batteries, known for their high energy density and efficiency.Tesla primarily uses lithium-ion batteries, known for their high energy density and efficiency.Tesla primarily uses lithium-ion batteries, known for their high energy density and efficiency.Tesla primarily uses lithium-ion batteries, known for their high energy density and efficiency.''',
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 18,
-              vertical: 8,
+          _buildAddToCartSection(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAddToCartSection() {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 18,
+        vertical: 8,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.primaryColor.withOpacity(0.15),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(18),
+          topRight: Radius.circular(18),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildPriceWidget(),
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              fixedSize: const Size(120, 20),
+              padding: EdgeInsets.zero,
             ),
-            decoration: BoxDecoration(
-              color: AppColors.primaryColor.withOpacity(0.15),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(18),
-                topRight: Radius.circular(18),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildPriceWidget(),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: const Size(120, 20),
-                    padding: EdgeInsets.zero,
-                  ),
-                  child: const Text("Add To Cart"),
-                ),
-              ],
-            ),
-          )
+            child: const Text("Add To Cart"),
+          ),
         ],
       ),
     );
