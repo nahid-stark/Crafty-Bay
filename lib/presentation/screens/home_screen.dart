@@ -1,8 +1,10 @@
+import 'package:crafty_bay/presentation/state_holders/home_screen_carousel_slider_controller.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/utility/assets_path.dart';
 import 'package:crafty_bay/presentation/widgets/app_bar_actions.dart';
 import 'package:crafty_bay/presentation/widgets/app_bar_logo.dart';
 import 'package:crafty_bay/presentation/widgets/category_item.dart';
+import 'package:crafty_bay/presentation/widgets/centered_circular_progress_indicator.dart';
 import 'package:crafty_bay/presentation/widgets/home_screen_carousel_slider.dart';
 import 'package:crafty_bay/presentation/widgets/product_card.dart';
 import 'package:crafty_bay/presentation/widgets/section_header.dart';
@@ -42,7 +44,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       _buildSearchBar(),
                       const SizedBox(height: 16),
-                      const HomeScreenCarouselSlider(),
+                      GetBuilder<HomeScreenCarouselSliderController>(
+                        builder: (carouselSliderController) {
+                          if (carouselSliderController.inProgress) {
+                            return const SizedBox(
+                              height: 205,
+                              child: CenteredCircularProgressIndicator(),
+                            );
+                          }
+                          return HomeScreenCarouselSlider(
+                            carouselSliderDataList: carouselSliderController.homeScreenCarouselSliderDataList,
+                          );
+                        },
+                      ),
                       const SizedBox(height: 8),
                       SectionHeader(
                         header: "All Categories",
@@ -84,73 +98,73 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildExitAppAlertDialog() {
     return AlertDialog(
-          title: const Row(
-            children: [
-              AppBarLogo(),
-            ],
-          ),
-          content: const Text(
-            "Are You Want to Exit?",
-            style: TextStyle(
-              fontSize: 22,
-              color: AppColors.primaryColor,
-              fontWeight: FontWeight.w500,
+      title: const Row(
+        children: [
+          AppBarLogo(),
+        ],
+      ),
+      content: const Text(
+        "Are You Want to Exit?",
+        style: TextStyle(
+          fontSize: 22,
+          color: AppColors.primaryColor,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: const Row(
+                children: [
+                  Text(
+                    "No",
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 20,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 2,
+                  ),
+                  Icon(
+                    Icons.cancel_outlined,
+                    color: Colors.green,
+                  ),
+                ],
+              ),
             ),
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  child: const Row(
-                    children: [
-                      Text(
-                        "No",
-                        style: TextStyle(
-                          color: Colors.green,
-                          fontSize: 20,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 2,
-                      ),
-                      Icon(
-                        Icons.cancel_outlined,
-                        color: Colors.green,
-                      ),
-                    ],
+            TextButton(
+              onPressed: () {
+                SystemNavigator.pop();
+              },
+              child: const Row(
+                children: [
+                  Text(
+                    "Yes",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 20,
+                    ),
                   ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    SystemNavigator.pop();
-                  },
-                  child: const Row(
-                    children: [
-                      Text(
-                        "Yes",
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 20,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 2,
-                      ),
-                      Icon(
-                        Icons.exit_to_app_sharp,
-                        color: Colors.red,
-                      ),
-                    ],
+                  SizedBox(
+                    width: 2,
                   ),
-                ),
-              ],
+                  Icon(
+                    Icons.exit_to_app_sharp,
+                    color: Colors.red,
+                  ),
+                ],
+              ),
             ),
           ],
-        );
+        ),
+      ],
+    );
   }
 
   Widget _buildPopularProductList() {

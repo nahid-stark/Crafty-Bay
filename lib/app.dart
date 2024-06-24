@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 class CraftyBay extends StatefulWidget {
   const CraftyBay({super.key});
 
+  static GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
+
   @override
   State<CraftyBay> createState() => _CraftyBayState();
 }
@@ -17,6 +19,7 @@ class _CraftyBayState extends State<CraftyBay> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: AppColors.primaryColor));
     return GetMaterialApp(
+      navigatorKey: CraftyBay.navigationKey,
       home: const SplashScreen(),
       initialBinding: ControllerBinder(),
       title: "Crafty Bay",
