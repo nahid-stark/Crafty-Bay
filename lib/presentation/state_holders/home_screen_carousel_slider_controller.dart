@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class HomeScreenCarouselSliderController extends GetxController {
   bool _inProgress = false;
   String _errorMessage = "";
-  List<HomeScreenCarouselSliderData> _homeScreenCarouselSliderDataList = [];
+  List<HomeScreenCarouselSliderData> _homeScreenCarouselSliderDataList = <HomeScreenCarouselSliderData>[];
 
   bool get inProgress => _inProgress;
 
@@ -22,7 +22,6 @@ class HomeScreenCarouselSliderController extends GetxController {
     _inProgress = true;
     update();
     final NetworkResponse response = await NetworkCaller.getRequest(url: Urls.homeScreenCarouselSlider);
-    await Future.delayed(const Duration(seconds: 9));
     if (response.isSuccess) {
       isSuccess = true;
       _homeScreenCarouselSliderDataList =

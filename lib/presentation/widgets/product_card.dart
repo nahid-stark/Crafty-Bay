@@ -1,5 +1,7 @@
+import 'package:crafty_bay/data/models/product.dart';
 import 'package:crafty_bay/presentation/screens/product_details_screen.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
+import 'package:crafty_bay/presentation/widgets/network_image_widget.dart';
 import 'package:crafty_bay/presentation/widgets/wish_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,9 +10,11 @@ class ProductCard extends StatelessWidget {
   const ProductCard({
     super.key,
     this.showAddToWishList = true,
+    required this.product,
   });
 
   final bool showAddToWishList;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +45,8 @@ class ProductCard extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8),
-                  child: Image.asset(
-                    "assets/icons/temp_image.png",
+                  child: NetworkImageWidget(
+                    url: product.image ?? "",
                   ),
                 ),
               ),
@@ -51,10 +55,10 @@ class ProductCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Tesla Model 3 Car Battery Combo Pack",
+                    Text(
+                      product.title ?? "",
                       maxLines: 2,
-                      style: TextStyle(
+                      style: const TextStyle(
                           overflow: TextOverflow.ellipsis,
                           fontSize: 14,
                           color: Colors.black45,
@@ -64,24 +68,24 @@ class ProductCard extends StatelessWidget {
                       spacing: 15,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
-                        const Text(
-                          "\$17000",
-                          style: TextStyle(
+                        Text(
+                          "\$${product.price}",
+                          style: const TextStyle(
                             color: AppColors.primaryColor,
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
                           ),
                         ),
-                        const Wrap(
+                        Wrap(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.star,
                               color: Colors.amber,
                               size: 20,
                             ),
                             Text(
-                              "3.4",
-                              style: TextStyle(
+                              "${product.star}",
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black45,
                               ),

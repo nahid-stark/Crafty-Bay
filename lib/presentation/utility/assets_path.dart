@@ -7,4 +7,5 @@ class AssetsPath {
   static const String phoneIcon = "$_iconPath/phone.png";
   static const String notificationIcon = "$_iconPath/notification.png";
   static const String deleteIcon = "$_iconPath/delete.png";
+  static const String soldOutIcon = "$_iconPath/sold_out.png";
 }

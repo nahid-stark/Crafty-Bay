@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crafty_bay/data/models/home_screen_carousel_slider_data.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
+import 'package:crafty_bay/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreenCarouselSlider extends StatefulWidget {
@@ -75,15 +76,75 @@ class _HomeScreenCarouselSliderState extends State<HomeScreenCarouselSlider> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 alignment: Alignment.center,
-                child: Text(
-                  carouselSliderItem.title ?? "",
-                  style: const TextStyle(fontSize: 16.0),
+                child: Row(
+                  children: [
+                    _buildSliderImage(carouselSliderItem),
+                    _buildSliderTitleAndButton(carouselSliderItem),
+                  ],
                 ),
               );
             },
           );
         },
       ).toList(),
+    );
+  }
+
+  Widget _buildSliderTitleAndButton(HomeScreenCarouselSliderData carouselSliderItem) {
+    return Expanded(
+      flex: 1,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            carouselSliderItem.title ?? "",
+            style: const TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: 100,
+            height: 30,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.zero,
+                backgroundColor: Colors.white,
+                foregroundColor: AppColors.primaryColor,
+              ),
+              onPressed: () {},
+              child: const Text(
+                "Buy Now",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSliderImage(HomeScreenCarouselSliderData carouselSliderItem) {
+    return Expanded(
+      flex: 1,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 12),
+        child: SizedBox(
+          height: double.maxFinite,
+          width: 20,
+          child: NetworkImageWidget(
+            url: carouselSliderItem.image ?? "",
+            height: double.maxFinite,
+            width: double.maxFinite,
+            boxFit: BoxFit.fill,
+          ),
+        ),
+      ),
     );
   }
 }
