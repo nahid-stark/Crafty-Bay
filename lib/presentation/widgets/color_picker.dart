@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ColorPicker extends StatefulWidget {
-  const ColorPicker({super.key, required this.colors, required this.onChange});
+  const ColorPicker({
+    super.key,
+    required this.onChange,
+    required this.colorCodes,
+  });
 
-  final List<Color> colors;
-  final void Function(Color selsctedColor) onChange;
+  final List<String> colorCodes;
+  final void Function(String selsctedColorCode) onChange;
 
   @override
   State<ColorPicker> createState() => _ColorPickerState();
@@ -19,18 +23,18 @@ class _ColorPickerState extends State<ColorPicker> {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          for (int index = 0; index < widget.colors.length; index++)
+          for (int index = 0; index < widget.colorCodes.length; index++)
             Row(
               children: [
                 GestureDetector(
                   onTap: () {
                     selectedIndex = index;
-                    widget.onChange(widget.colors[index]);
+                    widget.onChange(widget.colorCodes[index]);
                     setState(() {});
                   },
                   child: CircleAvatar(
                     radius: 18,
-                    backgroundColor: widget.colors[index],
+                    backgroundColor: Color(int.parse(widget.colorCodes[index], radix: 16)),
                     child: selectedIndex == index
                         ? const Icon(
                             Icons.check,

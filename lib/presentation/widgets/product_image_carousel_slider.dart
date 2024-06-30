@@ -1,9 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
+import 'package:crafty_bay/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
 
 class ProductImageCarouselSlider extends StatefulWidget {
-  const ProductImageCarouselSlider({super.key});
+  const ProductImageCarouselSlider({
+    super.key,
+    required this.productImages,
+  });
+
+  final List<String> productImages;
 
   @override
   State<ProductImageCarouselSlider> createState() => _ProductImageCarouselSliderState();
@@ -38,15 +44,14 @@ class _ProductImageCarouselSliderState extends State<ProductImageCarouselSlider>
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < widget.productImages.length; i++)
               Container(
                 height: 10,
                 width: 10,
                 margin: const EdgeInsets.symmetric(horizontal: 4),
                 decoration: BoxDecoration(
                   color: i == currentPage ? AppColors.primaryColor : Colors.white,
-                  border:
-                      Border.all(color: i == currentPage ? AppColors.primaryColor : Colors.white, width: 1),
+                  border: Border.all(color: i == currentPage ? AppColors.primaryColor : Colors.white, width: 1),
                   borderRadius: BorderRadius.circular(50),
                 ),
               ),
@@ -65,18 +70,15 @@ class _ProductImageCarouselSliderState extends State<ProductImageCarouselSlider>
           _selectedPageIndex.value = index;
         },
       ),
-      items: [1, 2, 3, 4, 5].map(
-        (i) {
+      items: widget.productImages.map(
+        (image) {
           return Builder(
             builder: (BuildContext context) {
               return Container(
                 width: MediaQuery.of(context).size.width,
                 color: Colors.grey.shade300,
                 alignment: Alignment.center,
-                child: Text(
-                  'text $i',
-                  style: const TextStyle(fontSize: 16.0),
-                ),
+                child: NetworkImageWidget(url: image),
               );
             },
           );

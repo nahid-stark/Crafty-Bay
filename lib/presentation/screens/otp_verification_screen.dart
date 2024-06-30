@@ -1,6 +1,13 @@
+import 'package:crafty_bay/data/network_caller/network_caller.dart';
+import 'package:crafty_bay/data/utility/urls.dart';
 import 'package:crafty_bay/presentation/screens/complete_profile_screen.dart';
+import 'package:crafty_bay/presentation/screens/main_bottom_nav_bar_screen.dart';
+import 'package:crafty_bay/presentation/state_holders/read_profile_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/verify_otp_controller.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/widgets/app_logo.dart';
+import 'package:crafty_bay/presentation/widgets/centered_circular_progress_indicator.dart';
+import 'package:crafty_bay/presentation/widgets/snack_message.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -51,11 +58,44 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   const SizedBox(height: 26),
                   _buildPinField(),
                   const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.off(() => const CompleteProfileScreen());
+                  GetBuilder<VerifyOtpController>(
+                    builder: (verifyOtpController) {
+                      if (verifyOtpController.inProgress) {
+                        return const CenteredCircularProgressIndicator();
+                      }
+                      return GetBuilder<ReadProfileController>(
+                        builder: (readProfileController) {
+                          return ElevatedButton(
+                            onPressed: () async {
+                              final bool result =
+                                  await verifyOtpController.verifyOtp(widget.email, _otpTEController.text);
+                              if (result) {
+                                final bool result2 = await readProfileController.readProfile();
+                                if (result2) {
+                                  print("Profile has data");
+                                  //Get.off(() => const MainBottomNavBarScreen());
+                                } else {
+                                  print("Profile has no such data. Going for complete Profile");
+                                  //Get.off(() => const CompleteProfileScreen());
+                                }
+                              } else {
+                                if (mounted) {
+                                  print(verifyOtpController.errorMessage);
+                                  //showSnackMessage(context, verifyOtpController.errorMessage);
+                                }
+                              }
+                            },
+                            child: const Text("Next"),
+                          );
+                        },
+                      );
                     },
-                    child: const Text("Next"),
+                  ),
+                  ElevatedButton(
+                    onPressed: (){
+                      NetworkCaller.getRequest(url: Urls.readProfile);
+                    },
+                    child: Text("hit"),
                   ),
                   const SizedBox(height: 16),
                   Obx(
@@ -80,12 +120,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               resendOtpCodeTimerCounterValue.value = 120;
               expireOtpCodeTimerController();
               isOtpCodeExpired.value = false;
+              NetworkCaller.getRequest(url: Urls.verifyEmail(widget.email));
             }
           : null,
       child: Text(
         "Resend Code",
-        style: textTheme.headlineSmall
-            ?.copyWith(color: isOtpCodeExpired.value ? Colors.purple : Colors.blueGrey),
+        style: textTheme.headlineSmall?.copyWith(color: isOtpCodeExpired.value ? Colors.purple : Colors.blueGrey),
       ),
     );
   }

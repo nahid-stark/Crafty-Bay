@@ -2,7 +2,11 @@ import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class SizePicker extends StatefulWidget {
-  const SizePicker({super.key, required this.sizes, required this.onChange});
+  const SizePicker({
+    super.key,
+    required this.sizes,
+    required this.onChange,
+  });
 
   final List<String> sizes;
   final void Function(String selectedSize) onChange;
@@ -30,13 +34,14 @@ class _SizePickerState extends State<SizePicker> {
                     setState(() {});
                   },
                   child: Container(
-                    height: 37,
-                    width: 37,
+                    height: 40,
+                    width: 40,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: index == selectedIndex ? AppColors.primaryColor : Colors.transparent,
                       borderRadius: BorderRadius.circular(100),
-                      border: Border.all(color: selectedIndex == index ? AppColors.primaryColor : Colors.black54, width: 1.3),
+                      border: Border.all(
+                          color: selectedIndex == index ? AppColors.primaryColor : Colors.black54, width: 1.3),
                     ),
                     child: index == selectedIndex
                         ? Text(
