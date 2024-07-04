@@ -204,7 +204,36 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     color: _selectedColor,
                     size: _selectedSize,
                   );
-                  addToCartController.addToCart(cartModel);
+                  addToCartController.addToCart(cartModel).then(
+                        (result) {
+                          if(result) {
+                            Get.snackbar(
+                              "",
+                              "",
+                              titleText: const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 12),
+                                child: Text(
+                                  "Add To Cart Successfully",
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                              animationDuration: const Duration(milliseconds: 500),
+                              backgroundColor: Colors.black54,
+                              borderRadius: 4,
+                              margin: const EdgeInsets.only(top: 12, left: 4, right: 50, bottom: 0),
+                              padding: const EdgeInsets.only(top: 16, bottom: 0),
+                              duration: const Duration(seconds: 3),
+                              snackPosition: SnackPosition.TOP,
+                              leftBarIndicatorColor: Colors.green,
+                              barBlur: 2,
+                            );
+                          }
+                        },
+                      );
                 },
                 style: ElevatedButton.styleFrom(
                   fixedSize: const Size(120, 20),
@@ -280,7 +309,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
         TextButton(
           onPressed: () {
-            Get.to(() => const ReviewsScreen());
+            Get.to(() => ReviewsScreen(productId: productDetails.productId!));
           },
           child: const Text(
             "Reviews",

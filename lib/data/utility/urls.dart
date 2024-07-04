@@ -8,5 +8,8 @@ class Urls {
   static String verifyEmail(String email) => "$_baseUrl/UserLogin/$email";
   static String verifyOtp(String email, String otp) => "$_baseUrl/VerifyLogin/$email/$otp";
   static const String addToCart = "$_baseUrl/CreateCartList";
+  static const String completeProfile = "$_baseUrl/CreateProfile";
   static const String readProfile = "$_baseUrl/ReadProfile";
+  static const String createReview = "$_baseUrl/CreateProductReview";
+  static String reviewByProductId(int productId) => "$_baseUrl/ListReviewByProduct/$productId";
 }

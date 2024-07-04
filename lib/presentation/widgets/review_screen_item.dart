@@ -1,9 +1,23 @@
 import 'package:crafty_bay/presentation/utility/assets_path.dart';
 import 'package:flutter/material.dart';
 
-class ReviewScreenItem extends StatelessWidget {
-  const ReviewScreenItem({super.key});
+class ReviewScreenItem extends StatefulWidget {
+  const ReviewScreenItem({
+    super.key,
+    required this.firstName,
+    required this.lastName,
+    required this.review,
+  });
 
+  final String firstName;
+  final String lastName;
+  final String review;
+
+  @override
+  State<ReviewScreenItem> createState() => _ReviewScreenItemState();
+}
+
+class _ReviewScreenItemState extends State<ReviewScreenItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -41,9 +55,9 @@ class ReviewScreenItem extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 10),
-        const Text(
-          "Rabbil Hasan",
-          style: TextStyle(
+        Text(
+          "${widget.firstName} ${widget.lastName}",
+          style: const TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w500,
             color: Colors.black54,
@@ -54,11 +68,11 @@ class ReviewScreenItem extends StatelessWidget {
   }
 
   Widget _buildReviewSection() {
-    return const Padding(
-      padding: EdgeInsets.all(8),
+    return Padding(
+      padding: const EdgeInsets.all(8),
       child: Text(
-        "Tesla's batteries are a cornerstone of its energy storage and electric vehicle (EV) technology, known for their innovation, efficiency, and performance.",
-        style: TextStyle(
+        widget.review,
+        style: const TextStyle(
           fontSize: 14,
           color: Colors.black54,
         ),

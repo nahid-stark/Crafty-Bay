@@ -1,13 +1,11 @@
 import 'package:crafty_bay/data/network_caller/network_caller.dart';
 import 'package:crafty_bay/data/utility/urls.dart';
 import 'package:crafty_bay/presentation/screens/complete_profile_screen.dart';
-import 'package:crafty_bay/presentation/screens/main_bottom_nav_bar_screen.dart';
 import 'package:crafty_bay/presentation/state_holders/read_profile_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/verify_otp_controller.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/widgets/app_logo.dart';
 import 'package:crafty_bay/presentation/widgets/centered_circular_progress_indicator.dart';
-import 'package:crafty_bay/presentation/widgets/snack_message.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -52,7 +50,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "A 4 Digit OTP Code Has Been Sent",
+                    "A 4 Digit OTP Code Has Been Sent To",
+                    style: textTheme.headlineSmall,
+                  ),
+                  Text(
+                    widget.email,
                     style: textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 26),
@@ -65,24 +67,118 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       }
                       return GetBuilder<ReadProfileController>(
                         builder: (readProfileController) {
+                          if (readProfileController.inProgress) {
+                            return const CenteredCircularProgressIndicator();
+                          }
                           return ElevatedButton(
                             onPressed: () async {
                               final bool result =
                                   await verifyOtpController.verifyOtp(widget.email, _otpTEController.text);
                               if (result) {
-                                final bool result2 = await readProfileController.readProfile();
-                                if (result2) {
-                                  print("Profile has data");
-                                  //Get.off(() => const MainBottomNavBarScreen());
+                                await readProfileController.readProfile();
+                                if (readProfileController.profileDataList.isNotEmpty) {
+                                  Get.snackbar(
+                                    "",
+                                    "",
+                                    titleText: const Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 12),
+                                      child: Text(
+                                        "Authentication Success",
+                                        style: TextStyle(
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 24,
+                                        ),
+                                      ),
+                                    ),
+                                    messageText: const Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 12),
+                                      child: Text(
+                                        "All information Registered",
+                                        style:
+                                            TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
+                                      ),
+                                    ),
+                                    animationDuration: const Duration(milliseconds: 200),
+                                    backgroundColor: Colors.black54,
+                                    borderRadius: 4,
+                                    margin: const EdgeInsets.only(top: 12, left: 4, right: 40),
+                                    padding: const EdgeInsets.symmetric(vertical: 4),
+                                    duration: const Duration(seconds: 1),
+                                    snackPosition: SnackPosition.TOP,
+                                    leftBarIndicatorColor: Colors.green,
+                                  );
+                                  Future.delayed(
+                                    const Duration(milliseconds: 1500),
+                                    () {
+                                      Get.back();
+                                    },
+                                  );
                                 } else {
-                                  print("Profile has no such data. Going for complete Profile");
-                                  //Get.off(() => const CompleteProfileScreen());
+                                  Get.snackbar(
+                                    "",
+                                    "",
+                                    titleText: const Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 12),
+                                      child: Text(
+                                        "Authentication Success",
+                                        style: TextStyle(
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 24,
+                                        ),
+                                      ),
+                                    ),
+                                    messageText: const Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 12),
+                                      child: Text(
+                                        "Need to Completer Profile Information",
+                                        style:
+                                            TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
+                                      ),
+                                    ),
+                                    animationDuration: const Duration(milliseconds: 500),
+                                    backgroundColor: Colors.black54,
+                                    borderRadius: 4,
+                                    margin: const EdgeInsets.only(top: 12, left: 4, right: 40),
+                                    padding: const EdgeInsets.symmetric(vertical: 4),
+                                    duration: const Duration(seconds: 3),
+                                    snackPosition: SnackPosition.TOP,
+                                    leftBarIndicatorColor: Colors.green,
+                                  );
+                                  Get.off(() => const CompleteProfileScreen());
                                 }
                               } else {
-                                if (mounted) {
-                                  print(verifyOtpController.errorMessage);
-                                  //showSnackMessage(context, verifyOtpController.errorMessage);
-                                }
+                                Get.snackbar(
+                                  "",
+                                  "",
+                                  titleText: const Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 12),
+                                    child: Text(
+                                      "OTP Not Sent",
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 24,
+                                      ),
+                                    ),
+                                  ),
+                                  messageText: const Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 12),
+                                    child: Text(
+                                      "Your OTP may be wrong",
+                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
+                                    ),
+                                  ),
+                                  animationDuration: const Duration(milliseconds: 500),
+                                  backgroundColor: Colors.black54,
+                                  borderRadius: 4,
+                                  margin: const EdgeInsets.only(top: 12, left: 4, right: 40),
+                                  padding: const EdgeInsets.symmetric(vertical: 4),
+                                  duration: const Duration(seconds: 3),
+                                  snackPosition: SnackPosition.TOP,
+                                  leftBarIndicatorColor: Colors.red,
+                                );
                               }
                             },
                             child: const Text("Next"),
@@ -90,12 +186,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         },
                       );
                     },
-                  ),
-                  ElevatedButton(
-                    onPressed: (){
-                      NetworkCaller.getRequest(url: Urls.readProfile);
-                    },
-                    child: Text("hit"),
                   ),
                   const SizedBox(height: 16),
                   Obx(

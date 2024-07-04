@@ -60,27 +60,29 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  GetBuilder<VerifyEmailController>(builder: (verifyEmailController) {
-                    if (verifyEmailController.inProgress) {
-                      return const CenteredCircularProgressIndicator();
-                    }
-                    return ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          verifyEmailController.verifyEmail(_emailTEController.text.trim()).then(
-                            (result) {
-                              if (result) {
-                                Get.to(() => OtpVerificationScreen(email: _emailTEController.text));
-                              } else {
-                                showSnackMessage(context, verifyEmailController.errorMessage);
-                              }
-                            },
-                          );
-                        }
-                      },
-                      child: const Text("Next"),
-                    );
-                  }),
+                  GetBuilder<VerifyEmailController>(
+                    builder: (verifyEmailController) {
+                      if (verifyEmailController.inProgress) {
+                        return const CenteredCircularProgressIndicator();
+                      }
+                      return ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            verifyEmailController.verifyEmail(_emailTEController.text.trim()).then(
+                              (result) {
+                                if (result) {
+                                  Get.off(() => OtpVerificationScreen(email: _emailTEController.text));
+                                } else {
+                                  showSnackMessage(context, verifyEmailController.errorMessage);
+                                }
+                              },
+                            );
+                          }
+                        },
+                        child: const Text("Next"),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),

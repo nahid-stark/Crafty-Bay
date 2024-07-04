@@ -14,7 +14,7 @@ class NetworkCaller {
       final Response response = await get(
         Uri.parse(url),
         headers: {
-          "accept": "application/json",
+          "Content-type": "application/json",
           "token": UserAuthController.accessToken,
         },
       );
@@ -55,10 +55,11 @@ class NetworkCaller {
     try {
       log(url);
       log(UserAuthController.accessToken);
+      log(jsonEncode(body));
       final Response response = await post(
         Uri.parse(url),
         headers: {
-          "accept": "application/json",
+          "Content-type": "application/json",
           "token": UserAuthController.accessToken,
         },
         body: jsonEncode(body),
@@ -73,7 +74,6 @@ class NetworkCaller {
           responseData: decodedData,
         );
       } else if (response.statusCode == 401) {
-        ///TODO: handle 401 unauthorized user
         _goToSignInScreen();
         return NetworkResponse(
           responseCode: response.statusCode,
