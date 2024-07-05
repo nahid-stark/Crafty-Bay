@@ -92,7 +92,7 @@ class ProductCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        WishButton(showAddToWishList: showAddToWishList),
+                        // WishButton(showAddToWishList: showAddToWishList),
                       ],
                     ),
                   ],

@@ -1,8 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crafty_bay/data/models/home_screen_carousel_slider_data.dart';
+import 'package:crafty_bay/presentation/screens/product_details_screen.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/widgets/network_image_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeScreenCarouselSlider extends StatefulWidget {
   const HomeScreenCarouselSlider({
@@ -79,7 +81,7 @@ class _HomeScreenCarouselSliderState extends State<HomeScreenCarouselSlider> {
                 child: Row(
                   children: [
                     _buildSliderImage(carouselSliderItem),
-                    _buildSliderTitleAndButton(carouselSliderItem),
+                    _buildSliderTitleAndButton(carouselSliderItem, carouselSliderItem.productId!),
                   ],
                 ),
               );
@@ -90,7 +92,7 @@ class _HomeScreenCarouselSliderState extends State<HomeScreenCarouselSlider> {
     );
   }
 
-  Widget _buildSliderTitleAndButton(HomeScreenCarouselSliderData carouselSliderItem) {
+  Widget _buildSliderTitleAndButton(HomeScreenCarouselSliderData carouselSliderItem, int productId) {
     return Expanded(
       flex: 1,
       child: Column(
@@ -115,7 +117,9 @@ class _HomeScreenCarouselSliderState extends State<HomeScreenCarouselSlider> {
                 backgroundColor: Colors.white,
                 foregroundColor: AppColors.primaryColor,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Get.to(() => ProductDetailsScreen(productId: productId));
+              },
               child: const Text(
                 "Buy Now",
                 style: TextStyle(

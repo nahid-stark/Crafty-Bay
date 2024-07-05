@@ -1,4 +1,6 @@
 import 'package:crafty_bay/presentation/state_holders/main_bottom_nav_bar_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/wish_list_controller.dart';
+import 'package:crafty_bay/presentation/widgets/centered_circular_progress_indicator.dart';
 import 'package:crafty_bay/presentation/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +14,12 @@ class WishListScreen extends StatefulWidget {
 
 class _WishListScreenState extends State<WishListScreen> {
   @override
+  void initState() {
+    super.initState();
+    Get.find<WishListController>().getWishList();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
@@ -22,7 +30,15 @@ class _WishListScreenState extends State<WishListScreen> {
         body: Column(
           children: [
             _appBar(),
-            _buildWishList(),
+            GetBuilder<WishListController>(builder: (wishListController) {
+              if (wishListController.inProgress) {
+                return const SizedBox(
+                  height: 500,
+                  child: CenteredCircularProgressIndicator(),
+                );
+              }
+              return _buildWishList(wishListController);
+            }),
           ],
         ),
       ),
@@ -49,22 +65,23 @@ class _WishListScreenState extends State<WishListScreen> {
     );
   }
 
-  Widget _buildWishList() {
+  Widget _buildWishList(WishListController wishListController) {
     return Expanded(
       child: GridView.builder(
         padding: EdgeInsets.zero,
-        itemCount: 15,
+        itemCount: wishListController.wishProductList.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 0.85,
         ),
         itemBuilder: (context, index) {
-          return const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             child: FittedBox(
-              // child: ProductCard(
-              //   showAddToWishList: false,
-              // ),
+              child: ProductCard(
+                product: wishListController.wishProductList[index],
+                showAddToWishList: false,
+              ),
             ),
           );
         },

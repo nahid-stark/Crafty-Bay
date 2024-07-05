@@ -5,16 +5,23 @@ class WishButton extends StatelessWidget {
   const WishButton({
     super.key,
     this.showAddToWishList = true,
+    this.isSelected = false,
+    required this.onTap,
   });
 
   final bool showAddToWishList;
+  final bool isSelected;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return Visibility(
       visible: showAddToWishList,
       replacement: _getIconButton(Icons.delete_outline_sharp),
-      child: _getIconButton(Icons.favorite_border_outlined),
+      child: InkWell(
+        onTap: onTap,
+        child: _getIconButton(_getIconData()),
+      ),
     );
   }
 
@@ -33,5 +40,9 @@ class WishButton extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  IconData _getIconData() {
+    return isSelected ? Icons.favorite : Icons.favorite_border_outlined;
   }
 }

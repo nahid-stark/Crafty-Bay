@@ -2,6 +2,7 @@ import 'package:crafty_bay/data/models/cart_model.dart';
 import 'package:crafty_bay/data/models/product_details_model.dart';
 import 'package:crafty_bay/presentation/screens/reviews_screen.dart';
 import 'package:crafty_bay/presentation/state_holders/add_to_cart_controller.dart';
+import 'package:crafty_bay/presentation/state_holders/add_to_wish_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/product_details_controller.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/widgets/centered_circular_progress_indicator.dart';
@@ -205,35 +206,35 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     size: _selectedSize,
                   );
                   addToCartController.addToCart(cartModel).then(
-                        (result) {
-                          if(result) {
-                            Get.snackbar(
-                              "",
-                              "",
-                              titleText: const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 12),
-                                child: Text(
-                                  "Add To Cart Successfully",
-                                  style: TextStyle(
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 20,
-                                  ),
-                                ),
+                    (result) {
+                      if (result) {
+                        Get.snackbar(
+                          "",
+                          "",
+                          titleText: const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(
+                              "Add To Cart Successfully",
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20,
                               ),
-                              animationDuration: const Duration(milliseconds: 500),
-                              backgroundColor: Colors.black54,
-                              borderRadius: 4,
-                              margin: const EdgeInsets.only(top: 12, left: 4, right: 50, bottom: 0),
-                              padding: const EdgeInsets.only(top: 16, bottom: 0),
-                              duration: const Duration(seconds: 3),
-                              snackPosition: SnackPosition.TOP,
-                              leftBarIndicatorColor: Colors.green,
-                              barBlur: 2,
-                            );
-                          }
-                        },
-                      );
+                            ),
+                          ),
+                          animationDuration: const Duration(milliseconds: 500),
+                          backgroundColor: Colors.black54,
+                          borderRadius: 4,
+                          margin: const EdgeInsets.only(top: 12, left: 4, right: 50, bottom: 0),
+                          padding: const EdgeInsets.only(top: 16, bottom: 0),
+                          duration: const Duration(seconds: 3),
+                          snackPosition: SnackPosition.TOP,
+                          leftBarIndicatorColor: Colors.green,
+                          barBlur: 2,
+                        );
+                      }
+                    },
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   fixedSize: const Size(120, 20),
@@ -318,7 +319,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
           ),
         ),
-        const WishButton(),
+        GetBuilder<AddToWishListController>(builder: (addToWishListController) {
+          if (addToWishListController.inProgress) {
+            return Transform.scale(
+              scale: 0.4,
+              child: const CircularProgressIndicator(),
+            );
+          }
+          return WishButton(
+            // isSelected: true,
+            onTap: () {
+              addToWishListController.addToWishList(widget.productId);
+            },
+          );
+        }),
       ],
     );
   }
