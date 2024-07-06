@@ -15,4 +15,5 @@ class Urls {
   static const String wishList = "$_baseUrl/ProductWishList";
   static String reviewByProductId(int productId) => "$_baseUrl/ListReviewByProduct/$productId";
   static String addToWishList(int productId) => "$_baseUrl/CreateWishList/$productId";
+  static String deleteCartItemByProductId(int productId) => "$_baseUrl/DeleteCartList/$productId";
 }

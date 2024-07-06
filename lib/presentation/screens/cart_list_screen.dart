@@ -1,6 +1,8 @@
+import 'package:crafty_bay/presentation/state_holders/cart_list_controller.dart';
 import 'package:crafty_bay/presentation/state_holders/main_bottom_nav_bar_controller.dart';
 import 'package:crafty_bay/presentation/utility/app_colors.dart';
 import 'package:crafty_bay/presentation/widgets/cart_product_item.dart';
+import 'package:crafty_bay/presentation/widgets/centered_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +15,12 @@ class CartListScreen extends StatefulWidget {
 
 class _CartListScreenState extends State<CartListScreen> {
   @override
+  void initState() {
+    super.initState();
+    Get.find<CartListController>().getCartList();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
@@ -23,23 +31,42 @@ class _CartListScreenState extends State<CartListScreen> {
         body: Column(
           children: [
             _appBar(),
-            Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: 7,
-                itemBuilder: (context, index) {
-                  return const CartProductItem();
-                },
-              ),
+            GetBuilder<CartListController>(
+              builder: (cartListController) {
+                if (cartListController.inProgress) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height - 204.1,
+                    child: const CenteredCircularProgressIndicator(),
+                  );
+                }
+                return Expanded(
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: cartListController.cartItemList.length,
+                    itemBuilder: (context, index) {
+                      return CartProductItem(
+                        itemQuantity: (int.parse(cartListController.cartItemList[index].size?.split("-")[1] ?? "0")),
+                        cartItem: cartListController.cartItemList[index],
+                        cartProduct: cartListController.cartProductList[index],
+                      );
+                    },
+                  ),
+                );
+              },
             ),
-            _buildCheckoutWidget(),
+            GetBuilder<CartListController>(builder: (cartListController) {
+              if (cartListController.inProgress) {
+                return const CenteredCircularProgressIndicator();
+              }
+              return _buildCheckoutWidget(cartListController);
+            }),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCheckoutWidget() {
+  Widget _buildCheckoutWidget(CartListController cartListController) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 18,
@@ -55,7 +82,7 @@ class _CartListScreenState extends State<CartListScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildTotalPriceWidget(),
+          _buildTotalPriceWidget(cartListController),
           ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(fixedSize: const Size(100, 20), padding: EdgeInsets.zero),
@@ -66,12 +93,12 @@ class _CartListScreenState extends State<CartListScreen> {
     );
   }
 
-  Widget _buildTotalPriceWidget() {
-    return const Column(
+  Widget _buildTotalPriceWidget(CartListController cartListController) {
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           "Total Price",
           style: TextStyle(
             color: Colors.black54,
@@ -79,8 +106,8 @@ class _CartListScreenState extends State<CartListScreen> {
           ),
         ),
         Text(
-          "\$1000000",
-          style: TextStyle(
+          "\$${cartListController.cartListTotalPrice}",
+          style: const TextStyle(
             color: AppColors.primaryColor,
             fontWeight: FontWeight.w500,
             fontSize: 20,

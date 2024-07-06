@@ -203,7 +203,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   CartModel cartModel = CartModel(
                     productId: widget.productId,
                     color: _selectedColor,
-                    size: _selectedSize,
+                    size: "$_selectedSize-${_itemCounter.value}",
                   );
                   addToCartController.addToCart(cartModel).then(
                     (result) {
